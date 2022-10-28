@@ -25,7 +25,6 @@ export const Editor: FC = () => {
     monaco.editor.onDidChangeMarkers(() => {
       const markers = monaco.editor.getModelMarkers({});
       // TODO: update markers
-      console.log(markers);
     });
   }, []);
 
