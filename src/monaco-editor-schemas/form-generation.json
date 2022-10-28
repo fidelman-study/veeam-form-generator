@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string"
+    },
+    "fields": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/field" }
+    },
+    "actions": {
+      "type": "array",
+      "items": { "$ref": "#/$defs/action" }
+    }
+  },
+  "required": ["title", "fields", "actions"],
+  "$defs": {
+    "action": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        }
+      },
+      "required": ["label"]
+    },
+    "field": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["label", "name", "type"],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "name": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["number", "input", "textarea", "date"]
+            }
+          }
+        },
+        {
+          "type": "object",
+          "required": ["label", "type", "name", "options"],
+          "properties": {
+            "label": {
+              "type": "string"
+            },
+            "type": {
+              "type": "string",
+              "enum": ["checkbox", "radio"]
+            },
+            "name": {
+              "type": "string"
+            },
+            "options": {
+              "type": "array",
+              "items": { "$ref": "#/$defs/optionField" }
+            }
+          }
+        }
+      ]
+    },
+    "optionField": {
+      "type": "object",
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": ["label", "value"]
+    }
+  }
+}
