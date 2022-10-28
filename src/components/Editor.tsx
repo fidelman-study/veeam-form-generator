@@ -14,19 +14,19 @@ const jsonDiagnosticsOptions = {
 };
 
 const monacoEditorOptions = {
-  minimap: {enabled: false}
-}
+  minimap: { enabled: false },
+};
 
 export const Editor: FC = () => {
   const handleEditorWillMount: EditorWillMount = useCallback((monaco) => {
     monaco.languages.json.jsonDefaults.setDiagnosticsOptions(
-      jsonDiagnosticsOptions
+      jsonDiagnosticsOptions,
     );
     monaco.editor.onDidChangeMarkers(() => {
-      const markers = monaco.editor.getModelMarkers({})
+      const markers = monaco.editor.getModelMarkers({});
       // TODO: update markers
       console.log(markers);
-    })
+    });
   }, []);
 
   const handleOnChange = useCallback((x: unknown, e: unknown) => {
