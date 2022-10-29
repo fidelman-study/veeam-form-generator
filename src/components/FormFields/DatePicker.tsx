@@ -2,9 +2,9 @@ import TextField from "@mui/material/TextField";
 import { DesktopDatePicker } from "@mui/x-date-pickers/DesktopDatePicker";
 import moment from "moment";
 import { useCallback, useState } from "react";
-import { IFormField } from "./index.interface";
+import { IFormFieldWithoutOptions } from "./index.interface";
 
-interface IDatePickerProps extends IFormField {}
+interface IDatePickerProps extends IFormFieldWithoutOptions {}
 
 type Date = moment.Moment;
 

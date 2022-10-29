@@ -8,8 +8,8 @@ import { FormGeneration } from "../generated-types/form-generation.interface";
 const data: FormGeneration = {
   title: "This is the form title",
   actions: [
-    { name: "cancel", label: "Cancel" },
-    { name: "save", label: "Save" },
+    { name: "cancel", label: "Cancel", type: "default" },
+    { name: "save", label: "Save", type: "default" },
   ],
   fields: [
     { label: "Number", name: "number", type: "number" },
@@ -27,7 +27,7 @@ const data: FormGeneration = {
       ],
     },
     {
-      label: "Checkbox",
+      label: "",
       name: "checkbox",
       type: "checkbox",
       options: [{ label: "Agree", value: "agree" }],

@@ -3,16 +3,9 @@ import MaterialRadioGroup from "@mui/material/RadioGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import FormControl from "@mui/material/FormControl";
 import FormLabel from "@mui/material/FormLabel";
-import { IFormField } from "./index.interface";
+import { IFormFieldWithOptions } from "./index.interface";
 
-type IOption = {
-  label: string;
-  value: string;
-};
-
-interface ICheckboxGroupProps extends IFormField {
-  options: IOption[];
-}
+interface ICheckboxGroupProps extends IFormFieldWithOptions {}
 
 export const CheckboxGroup = ({
   name,

@@ -21,6 +21,10 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["default"]
+        },
         "name": {
           "type": "string"
         },
@@ -28,7 +32,7 @@
           "type": "string"
         }
       },
-      "required": ["label", "name"]
+      "required": ["label", "name", "type"]
     },
     "field": {
       "oneOf": [
