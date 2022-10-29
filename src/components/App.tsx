@@ -2,7 +2,48 @@ import Box from "@mui/material/Box";
 import { TabContent } from "./TabContent";
 import { useTabManager } from "../hooks/use-tab-manager";
 import { Tabs } from "./Tabs";
-import { DatePicker } from "./FormFields/DatePicker";
+import { Form } from "./Form";
+import { FormGeneration } from "../generated-types/form-generation.interface";
+
+const data: FormGeneration = {
+  title: "This is the form title",
+  actions: [
+    { name: "cancel", label: "Cancel" },
+    { name: "save", label: "Save" },
+  ],
+  fields: [
+    { label: "Number", name: "number", type: "number" },
+    { label: "Input", name: "input", type: "input" },
+    { label: "Textarea", name: "textarea", type: "textarea" },
+    { label: "Date", name: "date", type: "date" },
+    {
+      label: "Checkbox group",
+      name: "checkboxgroup",
+      type: "checkbox",
+      options: [
+        { label: "Male", value: "Male" },
+        { label: "Female", value: "Female" },
+        { label: "Other", value: "Other" },
+      ],
+    },
+    {
+      label: "Checkbox",
+      name: "checkbox",
+      type: "checkbox",
+      options: [{ label: "Agree", value: "agree" }],
+    },
+    {
+      label: "Radio group",
+      name: "radio",
+      type: "radio",
+      options: [
+        { label: "Male", value: "Male" },
+        { label: "Female", value: "Female" },
+        { label: "Other", value: "Other" },
+      ],
+    },
+  ],
+};
 
 export default function App() {
   const { activeTabIndex, handleChangeActiveTab } = useTabManager();
@@ -18,11 +59,9 @@ export default function App() {
         }}
       />
       <TabContent value={activeTabIndex} index={0}>
-        <DatePicker name="datepicker" label="hi" />
+        <Form data={data} />
       </TabContent>
-      <TabContent value={activeTabIndex} index={1}>
-        Form
-      </TabContent>
+      <TabContent value={activeTabIndex} index={1}></TabContent>
     </Box>
   );
 }

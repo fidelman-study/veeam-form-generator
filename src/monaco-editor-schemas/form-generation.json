@@ -1,6 +1,7 @@
 {
   "$schema": "http://json-schema.org/draft-04/schema#",
   "type": "object",
+  "additionalProperties": false,
   "properties": {
     "title": {
       "type": "string"
@@ -18,18 +19,23 @@
   "$defs": {
     "action": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
+        "name": {
+          "type": "string"
+        },
         "label": {
           "type": "string"
         }
       },
-      "required": ["label"]
+      "required": ["label", "name"]
     },
     "field": {
       "oneOf": [
         {
           "type": "object",
           "required": ["label", "name", "type"],
+          "additionalProperties": false,
           "properties": {
             "label": {
               "type": "string"
@@ -45,7 +51,8 @@
         },
         {
           "type": "object",
-          "required": ["label", "type", "name", "options"],
+          "required": ["type", "name", "options"],
+          "additionalProperties": false,
           "properties": {
             "label": {
               "type": "string"
@@ -67,6 +74,7 @@
     },
     "optionField": {
       "type": "object",
+      "additionalProperties": false,
       "properties": {
         "label": {
           "type": "string"
