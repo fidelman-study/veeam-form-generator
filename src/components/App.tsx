@@ -5,8 +5,8 @@ import { Tabs } from "./Tabs";
 import { Form } from "./Form";
 import { FormGeneration } from "../generated-types/form-generation.interface";
 import { Editor } from "./Editor";
-import { useState } from "react";
-import { editor, MarkerSeverity } from "monaco-editor";
+import { useCallback, useState } from "react";
+import { editor } from "monaco-editor";
 
 const defaultData: FormGeneration = {
   title: "This is the form title",
@@ -50,9 +50,12 @@ const defaultData: FormGeneration = {
 
 export default function App() {
   const { activeTabIndex, handleChangeActiveTab } = useTabManager();
-  const [data, setData] = useState<FormGeneration | null>(defaultData);
+  const [editorContent, setEditorContent] = useState<string>(
+    JSON.stringify(defaultData, null, 2),
+  );
   const [markers, setMarkers] = useState<editor.IMarker[]>([]);
   const [editorNotSaved, setEditorNotSaved] = useState(false);
+  const [data, setData] = useState<FormGeneration>();
 
   const status = markers.length ? "error" : editorNotSaved ? "info" : "success";
   const message = markers.length
@@ -77,10 +80,13 @@ export default function App() {
       />
       <TabContent value={activeTabIndex} index={0}>
         <Editor
-          editorValue={JSON.stringify(data, null, 2)}
-          onChange={() => setEditorNotSaved(true)}
-          onEditorSubmit={(data) => {
-            setData(data);
+          value={editorContent}
+          onChange={(editorContent) => {
+            setEditorNotSaved(true);
+            setEditorContent(editorContent);
+          }}
+          onEditorSubmit={() => {
+            setData(JSON.parse(editorContent));
             setEditorNotSaved(false);
           }}
           markers={markers}

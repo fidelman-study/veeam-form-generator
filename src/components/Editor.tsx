@@ -1,7 +1,7 @@
 import Stack from "@mui/system/Stack";
 import Button from "@mui/material/Button";
 import { editor } from "monaco-editor";
-import { FC, useCallback, useRef, useState } from "react";
+import { FC, useCallback, useEffect, useRef, useState } from "react";
 import MonacoEditor, {
   EditorDidMount,
   EditorWillMount,
@@ -37,22 +37,20 @@ const monacoEditorOptions = {
 };
 
 interface IEditorProps {
-  onEditorSubmit: (data: FormGeneration) => void;
-  editorValue: string;
+  onEditorSubmit: () => void;
+  value: string;
   markers: editor.IMarker[];
   setMarkers: (markers: editor.IMarker[]) => void;
-  onChange: () => void;
+  onChange: (value: string) => void;
 }
 
 export const Editor: FC<IEditorProps> = ({
   onEditorSubmit,
-  editorValue,
+  value,
   markers,
   setMarkers,
   onChange,
 }) => {
-  const [value, setValue] = useState(editorValue);
-
   const handleEditorWillMount: EditorWillMount = useCallback(
     (monaco) => {
       monaco.languages.json.jsonDefaults.setDiagnosticsOptions(
@@ -66,25 +64,18 @@ export const Editor: FC<IEditorProps> = ({
     [setMarkers],
   );
 
-  const handleSubmit = useCallback(() => {
-    if (!markers.length) {
-      onEditorSubmit(JSON.parse(value));
-    }
-  }, [onEditorSubmit, markers.length, value]);
-
   return (
     <Container spacing={2} justifyContent="flex-start" alignItems="flex-start">
       <EditorWrapper>
         <MonacoEditor
           width={500}
-          height="400"
+          height="800"
           language="json"
           editorWillMount={handleEditorWillMount}
           options={monacoEditorOptions}
           value={value}
           onChange={(value) => {
-            setValue(value);
-            onChange();
+            onChange(value);
           }}
         />
       </EditorWrapper>
@@ -96,8 +87,8 @@ export const Editor: FC<IEditorProps> = ({
         ))}
       </Stack>
       <Button
+        onClick={onEditorSubmit}
         disabled={!!markers.length}
-        onClick={handleSubmit}
         variant="contained"
       >
         Apply
