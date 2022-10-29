@@ -1,25 +1,12 @@
 import Stack from "@mui/system/Stack";
 import Button from "@mui/material/Button";
 import { editor } from "monaco-editor";
-import {
-  FC,
-  MutableRefObject,
-  RefObject,
-  useCallback,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
-import MonacoEditor, {
-  EditorDidMount,
-  EditorWillMount,
-} from "react-monaco-editor";
+import { FC, MutableRefObject, useCallback } from "react";
+import { EditorDidMount, EditorWillMount } from "react-monaco-editor";
 import formGenerationSchema from "../monaco-editor-schemas/form-generation.json";
 import { Box } from "@mui/system";
 import styled from "@emotion/styled";
 import { grey } from "@mui/material/colors";
-
-import { FormGeneration } from "../generated-types/form-generation.interface";
 import { Editor } from "./Editor";
 import { ValidationAlerts } from "./ValidationAlerts";
 

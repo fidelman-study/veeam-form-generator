@@ -9,7 +9,7 @@ const globPromise = promisify(glob);
 const SCHEMAS_PATH = "src/monaco-editor-schemas";
 const GENERATED_TYPES_PATH = "src/generated-types";
 
-async function getSchemaPaths() {
+async function getSchemaFilePaths() {
   const files = await globPromise(
     `${process.cwd()}/${SCHEMAS_PATH}/*.json`,
     {},
@@ -17,12 +17,12 @@ async function getSchemaPaths() {
   return files;
 }
 
-async function getTypesByName(files) {
+async function getTypesByName(filePaths) {
   const types = await Promise.all(
-    files.map((file) => {
+    filePaths.map((filePath) => {
       const fn = async () => {
-        const fileName = path.parse(file).name;
-        const types = await compileFromFile(file);
+        const fileName = path.parse(filePath).name;
+        const types = await compileFromFile(filePath);
         return { fileName, types };
       };
       return fn();
@@ -50,8 +50,8 @@ async function writeTypesToFiles(typesByName, folderPath) {
 }
 
 async function start() {
-  const files = await getSchemaPaths();
-  const typesByName = await getTypesByName(files);
+  const filePaths = await getSchemaFilePaths();
+  const typesByName = await getTypesByName(filePaths);
   await writeTypesToFiles(
     typesByName,
     `${process.cwd()}/${GENERATED_TYPES_PATH}`,

@@ -1,4 +1,4 @@
-import { FC, MutableRefObject, RefObject } from "react";
+import { FC } from "react";
 import MonacoEditor, {
   EditorDidMount,
   EditorWillMount,
