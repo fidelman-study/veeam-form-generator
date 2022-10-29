@@ -37,9 +37,7 @@
     "generate-types": "node build-utils/json-schema-to-ts-interface.js",
     "build": "npm run generate-types & react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
