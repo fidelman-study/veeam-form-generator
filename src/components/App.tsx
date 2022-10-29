@@ -4,97 +4,81 @@ import { useTabManager } from "../hooks/use-tab-manager";
 import { Tabs } from "./Tabs";
 import { Form } from "./Form";
 import { FormGeneration } from "../generated-types/form-generation.interface";
-import { Editor } from "./Editor";
-import { useCallback, useState } from "react";
+import { FormGenerator } from "./FormGenerator";
+import { useCallback, useRef, useState } from "react";
 import { editor } from "monaco-editor";
-
-const defaultData: FormGeneration = {
-  title: "This is the form title",
-  actions: [
-    { name: "cancel", label: "Cancel", type: "default" },
-    { name: "save", label: "Save", type: "default" },
-  ],
-  fields: [
-    { label: "Number", name: "number", type: "number" },
-    { label: "Input", name: "input", type: "input" },
-    { label: "Textarea", name: "textarea", type: "textarea" },
-    { label: "Date", name: "date", type: "date" },
-    {
-      label: "Checkbox group",
-      name: "checkboxgroup",
-      type: "checkbox",
-      options: [
-        { label: "Male", value: "Male" },
-        { label: "Female", value: "Female" },
-        { label: "Other", value: "Other" },
-      ],
-    },
-    {
-      label: "",
-      name: "checkbox",
-      type: "checkbox",
-      options: [{ label: "Agree", value: "agree" }],
-    },
-    {
-      label: "Radio group",
-      name: "radio",
-      type: "radio",
-      options: [
-        { label: "Male", value: "Male" },
-        { label: "Female", value: "Female" },
-        { label: "Other", value: "Other" },
-      ],
-    },
-  ],
-};
+import { defaultConfiguration } from "../default-configuration";
+import { useConfigurationStatus } from "../hooks/use-configuration-status";
 
 export default function App() {
   const { activeTabIndex, handleChangeActiveTab } = useTabManager();
-  const [editorContent, setEditorContent] = useState<string>(
-    JSON.stringify(defaultData, null, 2),
-  );
+  const [editorContent, setEditorContent] = useState<string>();
   const [markers, setMarkers] = useState<editor.IMarker[]>([]);
   const [editorNotSaved, setEditorNotSaved] = useState(false);
   const [data, setData] = useState<FormGeneration>();
+  const getModelMarkersRef = useRef();
+  const [editorTouch, setEditorTouch] = useState(false);
 
-  const status = markers.length ? "error" : editorNotSaved ? "info" : "success";
-  const message = markers.length
-    ? `${markers.length} validation errors`
-    : editorNotSaved
-    ? "Unsaved changes"
-    : "All good";
+  const handleEditorSubmit = useCallback(() => {
+    // @ts-ignore
+    const markers = getModelMarkersRef.current();
+    if (!markers.length) {
+      setData(editorContent ? JSON.parse(editorContent) : undefined);
+      setEditorNotSaved(false);
+      setMarkers([]);
+    } else {
+      setMarkers(markers);
+    }
+  }, [setData, setEditorNotSaved, editorContent, getModelMarkersRef]);
+
+  const handleEditorChange = useCallback(
+    (editorContent: string) => {
+      setEditorNotSaved(true);
+      setEditorContent(editorContent);
+      setEditorTouch(true);
+    },
+    [setEditorNotSaved, setEditorContent],
+  );
+
+  const handlePrefillClick = useCallback(() => {
+    setEditorNotSaved(true);
+    setEditorContent(JSON.stringify(defaultConfiguration, null, 2));
+    setEditorTouch(true);
+  }, [setEditorNotSaved, setEditorContent]);
+
+  const handleResetClick = useCallback(() => {
+    setEditorNotSaved(false);
+    setEditorContent(JSON.stringify(data, null, 2));
+    setMarkers([]);
+  }, [setEditorContent, setEditorNotSaved, data, setMarkers]);
+
+  const configurationStatusInfo = useConfigurationStatus({
+    editorNotSaved,
+    editorTouch,
+    errorsNumber: markers.length,
+  });
 
   return (
     <Box sx={{ width: "100%" }}>
       <Tabs
         activeTabIndex={activeTabIndex}
         onChangeActiveTab={handleChangeActiveTab}
-        configurationStatusInfo={
-          status
-            ? {
-                status,
-                message,
-              }
-            : undefined
-        }
+        configurationStatusInfo={configurationStatusInfo}
       />
       <TabContent value={activeTabIndex} index={0}>
-        <Editor
+        <FormGenerator
+          getModelMarkersRef={getModelMarkersRef}
           value={editorContent}
-          onChange={(editorContent) => {
-            setEditorNotSaved(true);
-            setEditorContent(editorContent);
-          }}
-          onEditorSubmit={() => {
-            setData(JSON.parse(editorContent));
-            setEditorNotSaved(false);
-          }}
+          onChange={handleEditorChange}
+          onEditorSubmit={handleEditorSubmit}
           markers={markers}
-          setMarkers={setMarkers}
+          onPrefillClick={handlePrefillClick}
+          onResetClick={handleResetClick}
+          editorNotSaved={editorNotSaved}
         />
       </TabContent>
       <TabContent value={activeTabIndex} index={1}>
-        {data && <Form data={data} />}
+        <Form data={data} editorNotSaved={editorNotSaved} />
       </TabContent>
     </Box>
   );
