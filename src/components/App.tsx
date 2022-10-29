@@ -2,7 +2,6 @@ import Box from "@mui/material/Box";
 import { TabContent } from "./TabContent";
 import { useTabManager } from "../hooks/use-tab-manager";
 import { Tabs } from "./Tabs";
-import { FormConfigurator } from "./FormConfigurator";
 import { DatePicker } from "./FormFields/DatePicker";
 
 export default function App() {
@@ -13,6 +12,10 @@ export default function App() {
       <Tabs
         activeTabIndex={activeTabIndex}
         onChangeActiveTab={handleChangeActiveTab}
+        configurationStatusInfo={{
+          status: "info",
+          message: "3 validation errors",
+        }}
       />
       <TabContent value={activeTabIndex} index={0}>
         <DatePicker name="datepicker" label="hi" />
