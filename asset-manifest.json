@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/veeam-form-configurator/static/css/main.e6b71de4.css",
+    "main.js": "/veeam-form-configurator/static/js/main.17bf74c2.js",
+    "static/js/342.158b0334.chunk.js": "/veeam-form-configurator/static/js/342.158b0334.chunk.js",
+    "static/js/787.b6f2d637.chunk.js": "/veeam-form-configurator/static/js/787.b6f2d637.chunk.js",
+    "json.worker.js": "/veeam-form-configurator/json.worker.js",
+    "editor.worker.js": "/veeam-form-configurator/editor.worker.js",
+    "static/media/codicon.ttf": "/veeam-form-configurator/static/media/codicon.b797181c93b3755f4fa1.ttf",
+    "index.html": "/veeam-form-configurator/index.html",
+    "main.e6b71de4.css.map": "/veeam-form-configurator/static/css/main.e6b71de4.css.map",
+    "main.17bf74c2.js.map": "/veeam-form-configurator/static/js/main.17bf74c2.js.map",
+    "342.158b0334.chunk.js.map": "/veeam-form-configurator/static/js/342.158b0334.chunk.js.map",
+    "787.b6f2d637.chunk.js.map": "/veeam-form-configurator/static/js/787.b6f2d637.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6b71de4.css",
+    "static/js/main.17bf74c2.js"
+  ]
+}
