@@ -20,6 +20,8 @@ const TabsContent = styled(Box)`
   width: 660px;
 `;
 
+const TAB_SIZE = 4;
+
 export default function App() {
   const { activeTabIndex, handleChangeActiveTab } = useTabManager();
   const { errors, setErrors, addError, cleanErrors } = useErrorsManager();
@@ -80,13 +82,13 @@ export default function App() {
 
   const handlePrefillClick = useCallback(() => {
     setEditorNotSaved(true);
-    setEditorContent(JSON.stringify(defaultConfiguration, null, 2));
+    setEditorContent(JSON.stringify(defaultConfiguration, null, TAB_SIZE));
     setEditorTouch(true);
   }, [setEditorNotSaved, setEditorContent]);
 
   const handleResetClick = useCallback(() => {
     setEditorNotSaved(false);
-    setEditorContent(data ? JSON.stringify(data, null, 2) : "");
+    setEditorContent(data ? JSON.stringify(data, null, TAB_SIZE) : "");
     cleanErrors();
   }, [setEditorContent, setEditorNotSaved, data, cleanErrors]);
 
