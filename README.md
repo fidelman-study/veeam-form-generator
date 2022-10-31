@@ -1,46 +1,73 @@
-# Getting Started with Create React App
+# Veeam Form generation from JSON
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Supported JSON format
 
-## Available Scripts
+```typescript
+{
+    title: string, // title of the form
 
-In the project directory, you can run:
+    // action buttons
+    actions: {
+        label: string, // label on the button
+        name: string, // unique name of the action
+        type: "default" // type of the button
+    }[],
+
+    // form fields
+    fields: (
+        // input-like fields
+        {
+            label: string, // label of the field
+            name: string, // unique name  of the field
+             // type of the field
+            type: "number" | "input" | "textarea" | "date"
+        }
+        // group fields
+        | {
+            // label of the field, optional
+            // bcz it might have only one option
+            // e.g. Agree with Terms and Conditions
+            label?: string,
+            name: string, // unique name of the group field
+            type: "checkbox" | "radio",  // type of the group field
+            // options of the group field
+            options: {
+                label: string, // label of the option
+                value: string // value of the option
+            }[]
+        })[]
+}
+```
+
+## User Features
+
+- Form generation supports numeric, text, multiline, date, checkbox and radio fields
+- [Monaco Editor](https://microsoft.github.io/monaco-editor/) is used as a JSON input with validation and code highlighting features
+- JSON configuration is validated by [JSON Schema](https://json-schema.org/)
+- Option to prefill the JSON input by the predefined configuration
+- Option to cancel last JSON input changes
+- Configuration tab broadcasts a status of the JSON input and validation
+
+## Technical Features
+
+- Type generation from a JSON Schema
+- The core of the application follows declarative principles for easy schema extention
+- Error handling for invalid JSON input, JSON parsing, validation bypass and runtime form generation
+- Automatic deploy to Microsoft Azure on `main` branch push
+
+## Start the app
 
 ### `npm start`
 
-Runs the app in the development mode.\
+Generates TypeScript types from a JSON Schema and runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The page will reload if you make edits.\
 You will also see any lint errors in the console.
 
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
 ### `npm run build`
 
-Builds the app for production to the `build` folder.\
+Generates TypeScript types from a JSON Schema and builds the app for production to the `build` folder.\
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

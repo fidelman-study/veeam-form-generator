@@ -1,23 +1,19 @@
 import Stack from "@mui/system/Stack";
 import Button from "@mui/material/Button";
-import { editor } from "monaco-editor";
 import { FC, MutableRefObject, useCallback } from "react";
 import { EditorDidMount, EditorWillMount } from "react-monaco-editor";
 import formGenerationSchema from "../monaco-editor-schemas/form-generation.json";
 import { Box } from "@mui/system";
 import styled from "@emotion/styled";
 import { grey } from "@mui/material/colors";
-import { Editor } from "./Editor";
-import { ValidationAlerts } from "./ValidationAlerts";
+import { Editor, IMonaco } from "./Editor";
+import { ErrorAlerts } from "./ErrorAlerts";
+import { IError } from "../hooks/use-errors-manager";
 
 const EditorWrapper = styled(Box)`
   border: 1px solid ${grey[400]};
   border-radius: 4px;
   padding: 4px;
-`;
-
-const Container = styled(Stack)`
-  width: 500px;
 `;
 
 const jsonDiagnosticsOptions = {
@@ -31,24 +27,24 @@ const jsonDiagnosticsOptions = {
   ],
 };
 
-interface IFormGeneratorProps {
+interface IFormConfigurationProps {
   onEditorSubmit: () => void;
   value?: string;
-  markers: editor.IMarker[];
+  errors: IError[];
   onChange: (value: string) => void;
   onPrefillClick: () => void;
   onResetClick: () => void;
-  getModelMarkersRef: MutableRefObject<any>;
+  monacoRef: MutableRefObject<IMonaco | undefined>;
   editorNotSaved: boolean;
 }
 
-export const FormGenerator: FC<IFormGeneratorProps> = ({
+export const FormConfiguration: FC<IFormConfigurationProps> = ({
   onEditorSubmit,
   value,
-  markers,
+  errors,
   onChange,
   onPrefillClick,
-  getModelMarkersRef,
+  monacoRef,
   onResetClick,
   editorNotSaved,
 }) => {
@@ -60,13 +56,13 @@ export const FormGenerator: FC<IFormGeneratorProps> = ({
 
   const handleEditorDidMount: EditorDidMount = useCallback(
     (_editor, monaco) => {
-      getModelMarkersRef.current = monaco.editor.getModelMarkers;
+      monacoRef.current = monaco;
     },
-    [getModelMarkersRef],
+    [monacoRef],
   );
 
   return (
-    <Container spacing={2} justifyContent="flex-start" alignItems="flex-start">
+    <Stack spacing={2} justifyContent="flex-start" alignItems="flex-start">
       <EditorWrapper>
         <Editor
           value={value}
@@ -76,7 +72,7 @@ export const FormGenerator: FC<IFormGeneratorProps> = ({
         />
       </EditorWrapper>
       <Stack spacing={1}>
-        <ValidationAlerts markers={markers} />
+        <ErrorAlerts errors={errors} />
       </Stack>
       <Stack direction="row" spacing={2}>
         <Button color="secondary" onClick={onPrefillClick}>
@@ -85,14 +81,10 @@ export const FormGenerator: FC<IFormGeneratorProps> = ({
         <Button disabled={!editorNotSaved} onClick={onResetClick}>
           Cancel changes
         </Button>
-        <Button
-          disabled={!editorNotSaved}
-          onClick={onEditorSubmit}
-          variant="contained"
-        >
+        <Button disabled={!editorNotSaved} onClick={onEditorSubmit}>
           Apply
         </Button>
       </Stack>
-    </Container>
+    </Stack>
   );
 };

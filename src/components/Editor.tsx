@@ -3,10 +3,13 @@ import MonacoEditor, {
   EditorDidMount,
   EditorWillMount,
 } from "react-monaco-editor";
+import * as monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 const monacoEditorOptions = {
   minimap: { enabled: false },
 };
+
+export type IMonaco = typeof monaco;
 
 interface IEditorProps {
   value?: string;

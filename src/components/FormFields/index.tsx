@@ -4,36 +4,52 @@ import {
 } from "../../generated-types/form-generation.interface";
 import { CheckboxGroup } from "./CheckboxGroup";
 import { DatePicker } from "./DatePicker";
+import { Merge } from "./index.interface";
 import { Input } from "./Input";
 import { NumberInput } from "./NumberInput";
 import { RadioGroup } from "./RadioGroup";
 import { Textarea } from "./Textarea";
 
-type ITypeWithOptions = "checkbox" | "radio";
-type ITypeWithoutOptions = Exclude<Field["type"], ITypeWithOptions>;
+type IProps = Merge<Field>;
 
-type IFieldsMap = Record<
-  ITypeWithoutOptions,
-  (props: { label: string; name: string }) => JSX.Element
-> &
-  Record<
-    ITypeWithOptions,
-    (props: {
-      options: OptionField[];
-      name: string;
-      label?: string;
-    }) => JSX.Element
-  >;
+type IFieldsMap = Record<Field["type"], (props: IProps) => JSX.Element>;
 
 export const fieldsMap: IFieldsMap = {
-  number: ({ label, name }) => <NumberInput label={label} name={name} />,
-  input: ({ label, name }) => <Input label={label} name={name} />,
-  textarea: ({ label, name }) => <Textarea label={label} name={name} />,
-  date: ({ label, name }) => <DatePicker label={label} name={name} />,
-  radio: ({ label, name, options }) => (
-    <RadioGroup label={label} name={name} options={options} />
+  number: (props) => (
+    <NumberInput
+      label={getDefaultLabel(props, props.label)}
+      name={props.name}
+    />
   ),
-  checkbox: ({ label, name, options }) => (
-    <CheckboxGroup label={label} name={name} options={options} />
+  input: (props) => (
+    <Input label={getDefaultLabel(props, props.label)} name={props.name} />
+  ),
+  textarea: (props) => (
+    <Textarea label={getDefaultLabel(props, props.label)} name={props.name} />
+  ),
+  date: (props) => (
+    <DatePicker label={getDefaultLabel(props, props.label)} name={props.name} />
+  ),
+  radio: (props) => (
+    <RadioGroup
+      label={props.label}
+      name={props.name}
+      options={getDefaultOptions(props, props.options)}
+    />
+  ),
+  checkbox: (props) => (
+    <CheckboxGroup
+      label={props.label}
+      name={props.name}
+      options={getDefaultOptions(props, props.options)}
+    />
   ),
 };
+
+function getDefaultLabel(field: IProps, label?: string) {
+  return label ?? field.name;
+}
+
+function getDefaultOptions(_field: IProps, options?: OptionField[]) {
+  return options ?? [];
+}
