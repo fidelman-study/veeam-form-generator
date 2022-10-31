@@ -1,6 +1,5 @@
 {
   "name": "veeam-form-configurator",
-  "homepage": "https://fidelman-study.github.io/veeam-form-configurator",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
